@@ -1,39 +1,58 @@
-const SUBAPASE_URL = "https://wczijkqackrmzssfgdqm.supabase.co";
-const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indjemlqa3FhY2tybXpzc2ZnZHFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1OTk4MzksImV4cCI6MjA4NzE3NTgzOX0.ooRafiR7nR08d1f0_XEyX19AXPHRaOzjurNYw7SvZwI";
-const _supabase = supabase.createClient(SUBAPASE_URL, SUPABASE_KEY);
+// 1. Supabase ulanish ma'lumotlari
+const SUPABASE_URL = 'https://wczijkqackrmzssfgdqm.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indjemlqa3FhY2tybXpzc2ZnZHFtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE1OTk4MzksImV4cCI6MjA4NzE3NTgzOX0.ooRafiR7nR08d1f0_XEyX19AXPHRaOzjurNYw7SvZwI';
 
-const loginForm = document.getElementById('login-form');
-const errorDiv = document.getElementById('error-message');
-const loginBtn = document.getElementById('login-btn');
+const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-if (loginForm) {
-    loginForm.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const loginInput = document.getElementById('login').value.trim();
-        const passwordInput = document.getElementById('password').value.trim();
+// DIQQAT: checkAuth bu erda chaqirilmaydi! Faqat instructor_panel.js da chaqirilishi shart.
 
-        loginBtn.innerText = "Tekshirilmoqda...";
-        loginBtn.disabled = true;
-        errorDiv.style.display = 'none';
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('login-form');
 
-        try {
-            const { data: instructor, error } = await _supabase
-                .from('instructors')
-                .select('id, full_name')
-                .eq('login', loginInput)
-                .eq('password', passwordInput)
-                .single();
+    if (loginForm) {
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-            if (error || !instructor) throw new Error("Login yoki parol xato!");
+            const loginValue = document.getElementById('login').value.trim();
+            const passwordValue = document.getElementById('password').value.trim();
+            const errorMessage = document.getElementById('error-message');
+            const loginBtn = document.getElementById('login-btn');
 
-            localStorage.setItem('instructor_id', instructor.id);
-            localStorage.setItem('instructor_name', instructor.full_name);
-            window.location.replace('instructor_panel.html');
-        } catch (err) {
-            errorDiv.innerText = err.message;
-            errorDiv.style.display = 'block';
-            loginBtn.innerText = "Kirish";
-            loginBtn.disabled = false;
-        }
-    });
-}
+            // Tozalash
+            errorMessage.style.display = 'none';
+            loginBtn.disabled = true;
+            loginBtn.innerText = "Tekshirilmoqda...";
+
+            try {
+                // Supabase so'rovi
+                const { data: instructor, error } = await _supabase
+                    .from('instructors')
+                    .select('*')
+                    .eq('phone', loginValue) // AGAR BAZADA 'phone' BO'LSA! 'login' bo'lsa o'zgartirmang.
+                    .eq('password', passwordValue)
+                    .maybeSingle();
+
+                if (error) throw error;
+
+                if (!instructor) {
+                    errorMessage.style.display = 'block';
+                    errorMessage.innerText = "Login yoki parol xato!";
+                } else {
+                    // Muvaffaqiyatli login
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userRole', 'instructor');
+                    localStorage.setItem('instructorUser', JSON.stringify(instructor));
+
+                    window.location.replace('instructor_panel.html');
+                }
+            } catch (err) {
+                console.error("Login xatosi:", err);
+                errorMessage.style.display = 'block';
+                errorMessage.innerText = "Baza bilan aloqa yo'q yoki internet uzilgan!";
+            } finally {
+                loginBtn.disabled = false;
+                loginBtn.innerText = "Kirish";
+            }
+        });
+    }
+});
