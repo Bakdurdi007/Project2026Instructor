@@ -15,7 +15,7 @@ window.showSection = function(id) {
 
 window.logout = function() {
     localStorage.clear();
-    window.location.replace('login.html');
+    window.location.replace('../index.html');
 };
 
 // 2. Ilovani boshlash va Auth Guard
@@ -23,7 +23,7 @@ async function initApp() {
     const instructorId = localStorage.getItem('instructor_id');
 
     if (!instructorId) {
-        window.location.replace('login.html');
+        window.location.replace('../index.html');
         return;
     }
 
@@ -47,7 +47,7 @@ async function initApp() {
             startScanner();
         }
     } else {
-        window.location.replace('login.html');
+        window.location.replace('../index.html');
     }
 }
 
