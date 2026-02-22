@@ -112,47 +112,40 @@ function startScanner() {
     }
 }
 
-function executeScannerStart() {
+async function executeScannerStart() {
     const readerElem = document.getElementById("reader");
+    if (!readerElem) return;
 
-    // window obyektidan aniq qilib olish (ReferenceError oldini oladi)
-    const LibClass = window.Html5QrCode;
-
-    if (!LibClass) {
-        console.error("Kutubxona hali ham topilmadi!");
-        return;
+    // 1. Agar eski skaner obyekti bo'lsa, uni tozalaymiz
+    if (html5QrCode) {
+        try {
+            await html5QrCode.clear();
+        } catch (e) {
+            console.warn("Eski skanerni tozalashda xato:", e);
+        }
     }
 
-    // Yangi skaner obyekti
+    // 2. Yangi obyekt yaratish
+    const LibClass = window.Html5QrCode;
     html5QrCode = new LibClass("reader");
 
     const config = {
-        fps: 10,
+        fps: 15, // Bir oz tezroq
         qrbox: { width: 250, height: 250 },
         aspectRatio: 1.0
     };
 
+    // 3. Kamerani ishga tushirish
     html5QrCode.start(
         { facingMode: "environment" },
         config,
         onScanSuccess
     ).catch(err => {
-        console.error("Skaner ishga tushmadi:", err);
-        let errorMsg = "Kamera topilmadi yoki ruxsat berilmadi.";
-
-        // HTTPS tekshiruvi
-        if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
-            errorMsg = "Xatolik: Kamera faqat HTTPS xavfsiz ulanishda ishlaydi!";
-        }
-
-        readerElem.innerHTML = `
-            <div class="flex flex-col items-center justify-center h-full p-4 text-center">
-                <i data-lucide="camera-off" class="w-10 h-10 text-red-500 mb-2"></i>
-                <p class="text-red-500 text-xs">${errorMsg}</p>
-                <button onclick="location.reload()" class="mt-4 bg-slate-700 px-3 py-1 rounded text-[10px]">Qayta urinish</button>
-            </div>
-        `;
-        if (window.lucide) lucide.createIcons();
+        console.error("Kamera xatosi:", err);
+        // Agar xato chiqsa, foydalanuvchiga ko'rsatamiz
+        readerElem.innerHTML = `<div class="p-4 text-center text-red-500 text-xs">
+            Kamera ochilmadi. <br> Xato: ${err}
+        </div>`;
     });
 }
 
