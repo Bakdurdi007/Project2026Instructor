@@ -90,64 +90,41 @@ function showCountdown(stopTime) {
 
 // 3. Skanerlash logikasi (Kutubxonani kutish mantiqi bilan)
 function startScanner() {
-    // Kutubxonani tekshirishning eng ishonchli usuli
-    const ScannerLib = window.Html5QrCode;
+    // Kutubxonani window obyekti orqali qidirish
+    const ScannerClass = window.Html5QrCode || Html5QrCode;
 
-    if (!ScannerLib) {
-        console.warn("QR kutubxonasi hali tayyor emas, qayta urinilmoqda...");
-        setTimeout(startScanner, 500); // 1 soniya juda uzoq, 0.5 soniya yaxshiroq
+    if (!ScannerClass) {
+        console.warn("QR kutubxonasi yuklanishi kutilmoqda...");
+        setTimeout(startScanner, 1000);
         return;
     }
 
-    const readerElem = document.getElementById("reader");
-    if (!readerElem) return;
-
-    // Agar eski skaner bo'lsa to'xtatib keyin boshlash
-    if (html5QrCode && html5QrCode.isScanning) {
-        html5QrCode.stop().then(() => {
-            executeScannerStart();
-        }).catch(err => console.error("Skanerni to'xtatishda xato:", err));
-    } else {
-        executeScannerStart();
-    }
+    // Agar hamma narsa tayyor bo'lsa
+    executeScannerStart();
 }
 
-async function executeScannerStart() {
-    const readerElem = document.getElementById("reader");
-    if (!readerElem) return;
-
-    // 1. Agar eski skaner obyekti bo'lsa, uni tozalaymiz
-    if (html5QrCode) {
-        try {
-            await html5QrCode.clear();
-        } catch (e) {
-            console.warn("Eski skanerni tozalashda xato:", e);
-        }
-    }
-
-    // 2. Yangi obyekt yaratish
-    const LibClass = window.Html5QrCode;
-    html5QrCode = new LibClass("reader");
+function executeScannerStart() {
+    const ScannerClass = window.Html5QrCode || Html5QrCode;
+    // Skanerni yaratish
+    html5QrCode = new ScannerClass("reader");
 
     const config = {
-        fps: 15, // Bir oz tezroq
+        fps: 10,
         qrbox: { width: 250, height: 250 },
         aspectRatio: 1.0
     };
 
-    // 3. Kamerani ishga tushirish
     html5QrCode.start(
         { facingMode: "environment" },
         config,
         onScanSuccess
     ).catch(err => {
         console.error("Kamera xatosi:", err);
-        // Agar xato chiqsa, foydalanuvchiga ko'rsatamiz
-        readerElem.innerHTML = `<div class="p-4 text-center text-red-500 text-xs">
-            Kamera ochilmadi. <br> Xato: ${err}
-        </div>`;
+        // HTTPS yoki ruxsat xatosi
+        alert("Kamerani yoqib bo'lmadi: " + err);
     });
 }
+
 
 async function onScanSuccess(decodedText) {
     try {

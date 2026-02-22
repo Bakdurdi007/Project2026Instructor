@@ -57,17 +57,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-/**
- * Tizimdan chiqish funksiyasi
- */
-function logout() {
+// Funksiyani global qilish
+window.logout = function() {
     if (confirm("Rostdan ham tizimdan chiqmoqchimisiz?")) {
-        // Barcha login ma'lumotlarini tozalash
         localStorage.clear();
-        // Login sahifasiga qaytarish
         window.location.replace('index.html');
     }
-}
-
-// Funksiyani HTML-dagi onclick hodisasi ko'rishi uchun global obyektga bog'laymiz
-window.logout = logout;
+};
