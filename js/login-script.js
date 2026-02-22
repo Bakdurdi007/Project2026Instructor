@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const { data: instructor, error } = await _supabase
                     .from('instructors')
                     .select('*')
-                    .eq('phone', loginValue) // AGAR BAZADA 'phone' BO'LSA! 'login' bo'lsa o'zgartirmang.
+                    .eq('login', loginValue) // AGAR BAZADA 'phone' BO'LSA! 'login' bo'lsa o'zgartirmang.
                     .eq('password', passwordValue)
                     .maybeSingle();
 
