@@ -8,86 +8,66 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script>
-        // Sahifa yuklanishidan oldin tekshiramiz
-        (function() {
-            const instructorId = localStorage.getItem('instructor_id');
-            if (!instructorId || instructorId === "null") {
-                // Agar ID topilmasa, darhol login sahifasiga yuboramiz
-                window.location.replace('login.html');
-            }
-        })();
+        if (!localStorage.getItem('instructor_id')) {
+            window.location.replace('index.html');
+        }
     </script>
 </head>
 <body>
-
 <nav class="navbar">
-    <div class="user-info">
-        <h3 id="instructor-name">Yuklanmoqda...</h3>
-        <div class="status-online">
-            <span class="dot"></span> Online
-        </div>
+    <div class="user-block">
+        <h2 id="instructor-name">Yuklanmoqda...</h2>
+        <div class="online-status"><span class="green-dot"></span> Online</div>
     </div>
-    <div class="nav-buttons">
+    <div class="nav-actions">
         <button onclick="location.reload()" class="btn-refresh">Yangilash</button>
         <button onclick="logout()" class="btn-logout">Chiqish</button>
     </div>
 </nav>
 
-<main class="container">
-
-    <section id="scanner-section" class="active-section">
+<main class="content">
+    <section id="scanner-section" class="panel-section">
         <div id="reader"></div>
-        <div id="status-message" class="error-msg" style="display:none;"></div>
+        <p class="scan-hint">O'quvchi chekidagi QR kodni ramka ichiga keltiring</p>
     </section>
 
-    <section id="customer-card" style="display:none;">
+    <section id="customer-card" class="panel-section" style="display:none;">
         <div class="card">
-            <h2>Mijoz ma'lumotlari</h2>
-            <hr>
-            <p><strong>ID:</strong> <span id="c-id"></span></p>
-            <p><strong>Ism:</strong> <span id="c-name"></span></p>
-            <p><strong>Markaz:</strong> <span id="c-center"></span></p>
-            <p><strong>Kurs:</strong> <span id="c-type"></span></p>
-            <p><strong>Guruh:</strong> <span id="c-group"></span></p>
-            <p><strong>Summa:</strong> <span id="c-sum"></span> so'm</p>
-            <p><strong>Vaqt:</strong> <span id="c-time"></span> min</p>
-            <p><strong>Sana:</strong> <span id="c-date"></span></p>
+            <h3>QR Kod Ma'lumotlari</h3>
+            <div class="info-grid" id="ticket-data">
+                <p><strong>ID:</strong> <span id="c-id"></span></p>
+                <p><strong>Ism:</strong> <span id="c-name"></span></p>
+                <p><strong>Markaz:</strong> <span id="c-center"></span></p>
+                <p><strong>Kurs:</strong> <span id="c-type"></span></p>
+                <p><strong>Summa:</strong> <span id="c-sum"></span> so'm</p>
+            </div>
             <button id="start-lesson-btn" class="btn-start">Mashg'ulotni boshlash</button>
         </div>
     </section>
 
-    <section id="reports-section" style="display:none;">
-        <div class="stats-grid">
-            <div class="stat-box">Kunlik: <b id="d-money">0</b> so'm (<span id="d-min">0</span> m)</div>
-            <div class="stat-box">Haftalik: <b id="w-money">0</b> so'm</div>
-            <div class="stat-box">Oylik: <b id="m-money">0</b> so'm</div>
-            <div class="stat-box">Cashback: <b id="cb-money">0</b> so'm</div>
+    <section id="reports-section" class="panel-section" style="display:none;">
+        <h3>Mening Hisobotim</h3>
+        <div class="stats-container">
+            <div class="stat-item">Kunlik: <b id="d-money">0</b> so'm</div>
+            <div class="stat-item">Oylik: <b id="m-money">0</b> so'm</div>
         </div>
     </section>
 
-    <section id="customers-section" style="display:none;">
-        <h3>Xizmat ko'rsatilgan mijozlar</h3>
-        <div class="table-responsive">
-            <table id="customers-table">
-                <thead>
-                <tr>
-                    <th>№</th>
-                    <th>Ism</th>
-                    <th>Sana</th>
-                    <th>Vaqt (min)</th>
-                </tr>
-                </thead>
+    <section id="customers-section" class="panel-section" style="display:none;">
+        <h3>Mijozlar ro'yxati</h3>
+        <div class="table-wrapper">
+            <table>
+                <thead><tr><th>№</th><th>Mijoz</th><th>Vaqt</th></tr></thead>
                 <tbody id="customers-body"></tbody>
             </table>
         </div>
     </section>
-
 </main>
 
-<footer class="footer-menu">
-    <button onclick="showSection('scanner-section')">Skaner</button>
-    <button onclick="showSection('reports-section'); loadReports();">Hisobot</button>
-    <button onclick="showSection('customers-section'); loadCustomerList();">Mijozlar</button>
+<footer class="bottom-nav">
+    <button onclick="showSection('scanner-section')">📷 Skaner</button>
+    <button onclick="showSection('reports-section'); loadReports();">📊 Hisobot</button>
+    <button onclick="showSection('customers-section'); loadCustomerList();">👥 Mijozlar</button>
 </footer>
 
 <script src="js/instructor_panel.js"></script>

@@ -8,30 +8,24 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
-
 <div class="login-container">
     <div class="login-card">
         <h2>Instructor Panel</h2>
         <p>Tizimga kirish uchun ma'lumotlaringizni kiriting</p>
-
         <form id="login-form">
             <div class="input-group">
                 <label for="login">Login</label>
                 <input type="text" id="login" placeholder="Loginingizni kiriting" required>
             </div>
-
             <div class="input-group">
                 <label for="password">Parol</label>
                 <input type="password" id="password" placeholder="Parolingizni kiriting" required>
             </div>
-
             <div id="error-message" class="error-msg" style="display: none;"></div>
-
             <button type="submit" id="login-btn">Kirish</button>
         </form>
     </div>
 </div>
-
 <script src="js/login-script.js"></script>
 </body>
 </html>

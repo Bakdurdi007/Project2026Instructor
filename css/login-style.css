@@ -1,99 +1,11 @@
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: 'Poppins', sans-serif;
-}
-
-body {
-    background: #f0f2f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    padding: 20px;
-}
-
-.login-container {
-    width: 100%;
-    max-width: 400px;
-}
-
-.login-card {
-    background: #ffffff;
-    padding: 40px 30px;
-    border-radius: 15px;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-    text-align: center;
-}
-
-.login-card h2 {
-    color: #1e293b;
-    margin-bottom: 10px;
-}
-
-.login-card p {
-    color: #64748b;
-    font-size: 14px;
-    margin-bottom: 30px;
-}
-
-.input-group {
-    text-align: left;
-    margin-bottom: 20px;
-}
-
-.input-group label {
-    display: block;
-    font-size: 14px;
-    color: #1e293b;
-    margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.input-group input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 1px solid #cbd5e1;
-    border-radius: 8px;
-    outline: none;
-    transition: 0.3s;
-}
-
-.input-group input:focus {
-    border-color: #6366f1;
-    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-}
-
-#login-btn {
-    width: 100%;
-    padding: 12px;
-    background: #6366f1;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-#login-btn:hover {
-    background: #4f46e5;
-}
-
-.error-msg {
-    color: #ef4444;
-    font-size: 13px;
-    margin-bottom: 15px;
-    background: #fee2e2;
-    padding: 10px;
-    border-radius: 6px;
-}
-
-/* Mobil moslashuvchanlik */
-@media (max-width: 480px) {
-    .login-card {
-        padding: 30px 20px;
-    }
-}
+* { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
+body { background: #f0f2f5; display: flex; justify-content: center; align-items: center; height: 100vh; padding: 20px; }
+.login-container { width: 100%; max-width: 400px; }
+.login-card { background: #ffffff; padding: 40px 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); text-align: center; }
+.login-card h2 { color: #1e293b; margin-bottom: 10px; }
+.login-card p { color: #64748b; font-size: 14px; margin-bottom: 30px; }
+.input-group { text-align: left; margin-bottom: 20px; }
+.input-group label { display: block; font-size: 14px; color: #1e293b; margin-bottom: 8px; font-weight: 500; }
+.input-group input { width: 100%; padding: 12px 15px; border: 1px solid #cbd5e1; border-radius: 8px; outline: none; }
+#login-btn { width: 100%; padding: 12px; background: #6366f1; color: white; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
+.error-msg { color: #ef4444; font-size: 13px; margin-bottom: 15px; background: #fee2e2; padding: 10px; border-radius: 6px; }
